@@ -14,5 +14,5 @@ def test_04():
     assert solution_04.solve_04(data) == 13
     
 def test_04b():    
-    assert solution_04.solve_04b(data) == 0
+    assert solution_04.solve_04b(data) == 30
 
