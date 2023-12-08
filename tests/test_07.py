@@ -21,4 +21,17 @@ def test_07():
     assert solution_07.solve_07(data3) == 3542
     
 def test_07b():
-    assert False
+    # Tests while working out the joker logic
+    assert solution_07.handtype("AAAAA", True) == 5    
+    assert solution_07.handtype("AAJAA", True) == 5
+    assert solution_07.handtype("AAJKJ", True) == 4
+    assert solution_07.handtype("KTJJT", True) == 4    
+    assert solution_07.handtype("AJJKJ", True) == 4
+    assert solution_07.handtype("TTAAJ", True) == 3.5    
+    assert solution_07.handtype("TAJKJ", True) == 3
+    assert solution_07.handtype("AAJ89", True) == 3
+    assert solution_07.handtype("AA8K8", True) == 2
+    assert solution_07.handtype("A89KJ", True) == 1
+    assert solution_07.handtype("A89K5", True) == 0
+    assert solution_07.solve_07b(data) == 5905
+
