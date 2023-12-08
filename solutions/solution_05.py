@@ -3,6 +3,7 @@ sys.path.append("..")
 
 from aoclib import util
 import re
+import functools
 
 # - Which seeds need to be planted (header "Seeds")
 # - A list of maps which describe how to convert numbers from a source
@@ -46,7 +47,7 @@ def parse_05(data):
 def solve_05(data, b=False):
     seeds, maps = parse_05(data)
     # A quick solution for the second part, except it'll run for a long time and
-    # eat all available memory, more or less.
+    # eat all available memory and then some if you feed it the actual input.
     if b:
         tmp = []
         for n in range(0,len(seeds),2):
@@ -77,25 +78,24 @@ def solve_05(data, b=False):
     return min(seeds)
 
 
-# Return the overlapping part of 2 ranges (works for step==1 for now)
-def overlap(r1,r2):
+# Split r1 if it overlaps r2 and return (left,overlap,right),
+# None if no overlap
+def split_overlap(r1,r2):
     if r1.start > r2.stop-1 or r2.start > r1.stop-1:
         return None
-    return range(max(r1.start,r2.start), min(r1.stop,r2.stop))
+    return (range(r1.start, r2.start) if r1.start < r2.start else None,
+        range(max(r1.start,r2.start), min(r1.stop,r2.stop)),
+        range(r2.stop, r1.stop) if r1.stop > r2.stop else None)
 
 # The values on the initial seeds: line come in pairs. 
 # Within each pair, the first value is the start of the range 
 # and the second value is the length of the range.
-def solve_05b(data):
-    # For now, call the dog slow version until I figure out
-    # how to twiddle the ranges correctly.
-    return solve_05(data, b=True)
-
+def solve_05b(data):    
     seeds, maps = parse_05(data)    
     seedranges = []
     for n in range(0,len(seeds),2):
-        seedranges.append(seeds[n], seeds[n]+seeds[n+1])
-
+        seedranges.append(range(seeds[n], seeds[n]+seeds[n+1]))
+    
     tag = "seed"
     while tag != "location":
         # Find the map mapping from "tag" to the next category
@@ -108,11 +108,28 @@ def solve_05b(data):
         for r in seedranges:
             appended = False
             for m in mapranges:
-                ovr = overlap(r, m[1])
+                ovr = split_overlap(r, m[1])
                 if ovr is not None:
-                    pass
+                    # We should have a tuple
+                    (left, mid, right) = ovr                                        
+                    if left is not None:
+                        # Put the ends back for checking against mappings.
+                        # Thank Guido that Python supports adding to the
+                        # array you're looping over
+                        seedranges.append(left)
+                    if right is not None:
+                        seedranges.append(right)
+                    # Map the middle part
+                    m0 = mid.start - m[1].start + m[0]
+                    tmp.append(range(m0, m0+len(mid)))
+                    appended = True
+            if not appended:
+                # didn't fit any of the mappings
+                tmp.append(r)
+        seedranges = tmp        
+        tag = next
 
-    return min(seeds)
+    return min(map(lambda r: r.start, seedranges ) )
 
 
 if __name__ == '__main__':

@@ -11,4 +11,4 @@ def test_05():
     
 def test_05b():    
     assert solution_05.solve_05b(data) == 46
-
+    
