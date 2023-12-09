@@ -16,9 +16,9 @@ data3 = ["2345A 2", "2345J 5", "J345A 3", "32T3K 7", "T55J5 17", "KK677 11",
     "2AAAA 13", "2JJJJ 41", "JJJJ2 31"]
 
 def test_07(): 
-    assert solution_07.solve_07(data) == 6440
-    assert solution_07.solve_07(data2) == 1343
-    assert solution_07.solve_07(data3) == 3542
+    assert solution_07.solve_07(data, False) == 6440
+    assert solution_07.solve_07(data2, False) == 1343
+    assert solution_07.solve_07(data3, False) == 3542
     
 def test_07b():
     # Tests while working out the joker logic
