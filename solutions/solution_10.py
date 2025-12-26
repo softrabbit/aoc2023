@@ -2,11 +2,8 @@ import sys
 sys.path.append("..")
 
 from aoclib import util
-
-# Find the single giant loop starting at S. How many steps along the loop
-# does it take to get from the starting position to the point farthest 
-# from the starting position?
-def solve_10(data):
+# Find the single giant loop starting at S and return it.
+def find_loop(data):
     # N, E, S, W mappings (clockwise!)
     pipes = {'|':  [True, False, True, False],
             '-':  [False, True, False, True],
@@ -57,11 +54,27 @@ def solve_10(data):
                 loop = False
                 break
 
-    return len(path)/2
+    return path
 
-# Oh, but how many tiles are inside the loop?
-def solve_10b(data):
-    # Great. How do I define "outside" and "inside"?
+def solve_10(data):
+    # How many steps along the loop
+    # does it take to get from the starting position 
+    # to the point farthest from the starting position?
+    return len(find_loop(data))/2
+
+# Oh, but how many tiles are enclosed by the loop?
+def solve_10b(data):    
+    path = find_loop(data)
+    
+    for step in path:
+        # On every horisontal line, count tiles that are inside, i.e.
+        # start at "out" and flip insideness on every crossing of boundary        
+        tiles = 0
+        for row in data:
+            inside = False
+            for tile in row:
+                # How to filter out other pipes?
+                pass
     return None
 
 if __name__ == '__main__':
