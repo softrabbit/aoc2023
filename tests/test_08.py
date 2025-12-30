@@ -38,5 +38,5 @@ def test_08():
     assert solution_08.solve_08(data2.splitlines()) == 6
 
 def test08b():
-    assert solution_08.solve_08b(data3) == 6
+    assert solution_08.solve_08b(data3.splitlines()) == 6
 
